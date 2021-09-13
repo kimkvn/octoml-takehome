@@ -1,4 +1,5 @@
 import React from "react";
+import HardwareTargets from "../components/HardwareTargets";
 import { makeStyles, useTheme } from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -16,11 +17,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({
   box: {
     display: "flex",
-    "flex-direction": "column",
+    flexDirection: "column",
   },
   accordionSummary: {
     display: "flex",
-    "flex-direction": "column",
+    flexDirection: "column",
   },
 }));
 
@@ -30,10 +31,15 @@ const Home = () => {
     benchmark: false,
     accelerate: false,
   });
+  const [provider, setProvider] = React.useState("");
 
   const handleChangeCheck = (event) => {
     event.stopPropagation();
     setChecked({ ...checked, [event.target.name]: event.target.checked });
+  };
+
+  const handleSetProvider = (event) => {
+    setProvider(event.target.value);
   };
 
   return (
@@ -47,46 +53,53 @@ const Home = () => {
           <Card>
             <CardHeader title="Octomize" />
             <CardContent>
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked.benchmark}
-                        onClick={handleChangeCheck}
-                        name="benchmark"
-                        color="primary"
-                      />
-                    }
-                  />
-                  <div className={classes.accordionSummary}>
-                    <b>Benchmark</b>{" "}
-                    <p>This is some sub content to explain benchmarking</p>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>whoa details neato</AccordionDetails>
-              </Accordion>
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked.accelerate}
-                        onClick={handleChangeCheck}
-                        name="accelerate"
-                        color="primary"
-                      />
-                    }
-                  />
-                  <div className={classes.accordionSummary}>
-                    <b>Accelerate</b>
-                    <p>
-                      Make your models go <i>fast</i>
-                    </p>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>I'm fast af boi</AccordionDetails>
-              </Accordion>
+              <section>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={checked.benchmark}
+                          onClick={handleChangeCheck}
+                          name="benchmark"
+                          color="primary"
+                        />
+                      }
+                    />
+                    <div className={classes.accordionSummary}>
+                      <b>Benchmark</b>{" "}
+                      <p>This is some sub content to explain benchmarking</p>
+                    </div>
+                  </AccordionSummary>
+                  <AccordionDetails>whoa details neato</AccordionDetails>
+                </Accordion>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={checked.accelerate}
+                          onClick={handleChangeCheck}
+                          name="accelerate"
+                          color="primary"
+                        />
+                      }
+                    />
+                    <div className={classes.accordionSummary}>
+                      <b>Accelerate</b>
+                      <p>
+                        Make your models go <i>fast</i>
+                      </p>
+                    </div>
+                  </AccordionSummary>
+                  <AccordionDetails>I'm fast af boi</AccordionDetails>
+                </Accordion>
+              </section>
+              <section>
+                <div className="targetsList">
+                  <HardwareTargets />
+                </div>
+              </section>
             </CardContent>
           </Card>
         </Grid>
