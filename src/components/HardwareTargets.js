@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
+import HardwareTargetItem from "./HardwareTargetItem";
 
 const useStyles = makeStyles((theme) => ({
   targetsHeader: {
@@ -23,68 +24,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/*
-  [
-  {
-    provider: 'AWS',
-    instances: [
-      {
-        instance: m4.large,
-        cpu: 2,
-        memory: 8
-      },
-      {
-        instance: m4.xlarge,
-        cpu: 4,
-        memory: 16,
-      },
-      {
-        instance: m4.2xlarge,
-        cpu: 8,
-        memory: 32
-      },
-      {
-        instance: m4.4xlarge,
-        cpu: 16,
-        memory: 64
-      }
-    ]
-  },
-  {
-    provider: 'GCP',
-    instances: [
-      {
-        instance: n2-standard-2,
-        cpu: 2,
-        memory: 8
-      },
-      {
-        instance: n2-standard-4
-        cpu: 4,
-        memory: 16,
-      },
-      {
-        instance: n2-standard-8
-        cpu: 8,
-        memory: 32
-      },
-      {
-        instance: n2-standard-16,
-        cpu: 16,
-        memory: 64
-      }
-    ]
-  },
-  }
-]
-*/
-
 const HardwareTargets = () => {
   const classes = useStyles();
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [isLoading, setLoading] = React.useState(true);
-  const [provider, setProvider] = React.useState("");
-  const [instance, setInstance] = React.useState("");
 
   async function fetchHardwareTargets() {
     const url = "http://netheria.takehome.octoml.ai/hardware";
@@ -130,10 +73,6 @@ const HardwareTargets = () => {
     assembleHardwareTargetsData();
   }, []);
 
-  const handleSetProvider = (event) => setProvider(event.target.value);
-
-  const handleSetInstance = (event) => setInstance(event.target.value);
-
   if (isLoading) {
     return <h1>LOADING</h1>;
   }
@@ -147,42 +86,7 @@ const HardwareTargets = () => {
         </Button>
       </div>
       <List>
-        <ListItem className={classes.listItem}>
-          <FormControl variant="outlined">
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={provider}
-              onChange={handleSetProvider}
-            >
-              {Object.keys(hardwareTargets).map((provider) => (
-                <MenuItem key={provider} value={provider}>
-                  {provider}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl variant="outlined">
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={instance}
-              onChange={handleSetInstance}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"large"}>large</MenuItem>
-              <MenuItem value={"xlarge"}>xlarge</MenuItem>
-              <MenuItem value={"xxlarge"}>xxlarge</MenuItem>
-            </Select>
-          </FormControl>
-          <div className="vcpuValue">2</div>
-          <div className="memoryValue">3.75</div>
-          <Button>
-            <CloseIcon />
-          </Button>
-        </ListItem>
+        <HardwareTargetItem data={hardwareTargets} />
       </List>
     </>
   );
