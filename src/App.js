@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    background: "#F5F5F5",
   },
 }));
 
@@ -86,7 +87,7 @@ function App() {
   const handleDrawerToggle = () => setOpen(!open);
 
   return (
-    <div className="App">
+    <div className={classes.root}>
       <Router>
         <Drawer
           variant="permanent"
@@ -121,14 +122,16 @@ function App() {
             </Link>
           </List>
         </Drawer>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/benchmarks">
-            <Benchmarks />
-          </Route>
-        </Switch>
+        <main className={classes.content}>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/benchmarks">
+              <Benchmarks />
+            </Route>
+          </Switch>
+        </main>
       </Router>
     </div>
   );
