@@ -29,7 +29,10 @@ const HardwareTargetItem = ({ data }) => {
   const [provider, setProvider] = React.useState(null);
   const [instance, setInstance] = React.useState(null);
 
-  const handleSetProvider = (event) => setProvider(event.target.value);
+  const handleSetProvider = (event) => {
+    setProvider(event.target.value);
+    setInstance(null);
+  };
 
   const handleSetInstance = (event) => setInstance(event.target.value);
 
@@ -66,7 +69,7 @@ const HardwareTargetItem = ({ data }) => {
             : null}
         </Select>
       </FormControl>
-      <div className="vcpuValue">
+      <div className="cpuValue">
         {provider && instance ? data[provider].instances[instance].cpu : 0}
       </div>
       <div className="memoryValue">
