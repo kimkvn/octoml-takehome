@@ -24,69 +24,92 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HardwareTargets = () => {
+// let currentTargets = [
+//   {
+//     instance: null,
+//     cpu: '',
+//   }
+// ]
+
+const HardwareTargets = ({ hardwareTargets }) => {
   const classes = useStyles();
-  const [hardwareTargets, setHardwareTargets] = React.useState(null);
-  const [isLoading, setLoading] = React.useState(true);
-
-  async function fetchHardwareTargets() {
-    const url = "http://netheria.takehome.octoml.ai/hardware";
-    try {
-      let res = await fetch(url, {
-        method: "GET",
-        // mode: "no-cors",
-      });
-      return await res.json();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function assembleHardwareTargetsData() {
-    let data = await fetchHardwareTargets();
-
-    let final = {};
-
-    const addProviderInstance = (target) => {
-      final[target.provider].instances[target.instance] = {
-        name: target.instance,
-        cpu: target.cpu,
-        memory: target.memory,
-      };
-    };
-
-    data.forEach((target) => {
-      if (final[target.provider]) {
-        addProviderInstance(target);
-      } else {
-        final[target.provider] = {
-          instances: {},
-        };
-        addProviderInstance(target);
-      }
-    });
-    setHardwareTargets(final);
-    setLoading(false);
-  }
+  const [canAddTarget, setCanAddTarget] = React.useState(false);
+  const [currentTargets, updateCurrentTargets] = React.useState([
+    {
+      id: 0,
+      instance: null,
+      cpu: null,
+    },
+  ]);
 
   React.useEffect(() => {
-    assembleHardwareTargetsData();
-  }, []);
+    checkCanAddTarget();
+  }, [currentTargets]);
 
-  if (isLoading) {
-    return <h1>LOADING</h1>;
-  }
+  const checkCanAddTarget = () => {
+    let i = 0;
+    while (i < currentTargets.length) {
+      if (currentTargets[i].instance === null) {
+        setCanAddTarget(false);
+        return;
+      }
+      i++;
+    }
+    setCanAddTarget(true);
+  };
+
+  const handleAddTarget = () => {
+    const newTargets = [
+      ...currentTargets,
+      {
+        id: 0,
+        instance: null,
+        cpu: null,
+      },
+    ];
+    updateCurrentTargets(newTargets);
+  };
+
+  const handleSelectInstance = (id, newInstance) => {
+    console.log(id, newInstance);
+    const newTargets = currentTargets.map((target) => {
+      if (target.id === id) {
+        return {
+          ...target,
+          id: newInstance,
+          instance: newInstance,
+        };
+      }
+      return target;
+    });
+
+    updateCurrentTargets(newTargets);
+  };
 
   return (
     <>
       <div className={classes.targetsHeader}>
         <h4>Hardware targets</h4>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleAddTarget}
+          disabled={!canAddTarget}
+        >
           Add
         </Button>
       </div>
       <List>
-        <HardwareTargetItem data={hardwareTargets} />
+        {currentTargets.map((target, i) => (
+          <HardwareTargetItem
+            key={i}
+            id={target.id}
+            data={hardwareTargets}
+            instance={target.instance}
+            cpu={target.cpu}
+            handleSelectInstance={handleSelectInstance}
+          />
+        ))}
       </List>
     </>
   );

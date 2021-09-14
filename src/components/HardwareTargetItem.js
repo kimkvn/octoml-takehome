@@ -23,18 +23,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HardwareTargetItem = ({ data }) => {
+const HardwareTargetItem = ({ id, data, instance, handleSelectInstance }) => {
   const classes = useStyles();
 
   const [provider, setProvider] = React.useState(null);
-  const [instance, setInstance] = React.useState(null);
+  //   const [instance, setInstance] = React.useState(null);
 
   const handleSetProvider = (event) => {
     setProvider(event.target.value);
-    setInstance(null);
+    handleSelectInstance(id, null);
   };
 
-  const handleSetInstance = (event) => setInstance(event.target.value);
+  const handleSetInstance = (event) =>
+    handleSelectInstance(id, event.target.value);
 
   return (
     <ListItem className={classes.listItem}>

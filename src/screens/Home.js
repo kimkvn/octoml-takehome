@@ -27,19 +27,60 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
+  const [hardwareTargets, setHardwareTargets] = React.useState(null);
+  const [isLoading, setLoading] = React.useState(true);
   const [checked, setChecked] = React.useState({
     benchmark: false,
     accelerate: false,
   });
-  const [provider, setProvider] = React.useState("");
+
+  async function fetchHardwareTargets() {
+    const url = "http://netheria.takehome.octoml.ai/hardware";
+    try {
+      let res = await fetch(url, {
+        method: "GET",
+        // mode: "no-cors",
+      });
+      return await res.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function assembleHardwareTargetsData() {
+    let data = await fetchHardwareTargets();
+
+    let final = {};
+
+    const addProviderInstance = (target) => {
+      final[target.provider].instances[target.instance] = {
+        name: target.instance,
+        cpu: target.cpu,
+        memory: target.memory,
+      };
+    };
+
+    data.forEach((target) => {
+      if (final[target.provider]) {
+        addProviderInstance(target);
+      } else {
+        final[target.provider] = {
+          instances: {},
+        };
+        addProviderInstance(target);
+      }
+    });
+    setHardwareTargets(final);
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    assembleHardwareTargetsData();
+  }, []);
 
   const handleChangeCheck = (event) => {
     event.stopPropagation();
     setChecked({ ...checked, [event.target.name]: event.target.checked });
-  };
-
-  const handleSetProvider = (event) => {
-    setProvider(event.target.value);
   };
 
   return (
@@ -97,7 +138,11 @@ const Home = () => {
               </section>
               <section>
                 <div className="targetsList">
-                  <HardwareTargets />
+                  {isLoading ? (
+                    <h1>LOADING</h1>
+                  ) : (
+                    <HardwareTargets hardwareTargets={hardwareTargets} />
+                  )}
                 </div>
               </section>
             </CardContent>
