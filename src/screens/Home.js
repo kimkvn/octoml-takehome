@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
+  const [allInstances, setAllInstances] = React.useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [checked, setChecked] = React.useState({
     benchmark: false,
@@ -58,6 +59,7 @@ const Home = () => {
         cpu: target.cpu,
         memory: target.memory,
       };
+      setAllInstances((prevInstances) => [...prevInstances, target.instance]);
     };
 
     data.forEach((target) => {
@@ -141,7 +143,10 @@ const Home = () => {
                   {isLoading ? (
                     <h1>LOADING</h1>
                   ) : (
-                    <HardwareTargets hardwareTargets={hardwareTargets} />
+                    <HardwareTargets
+                      hardwareTargets={hardwareTargets}
+                      allInstances={allInstances}
+                    />
                   )}
                 </div>
               </section>

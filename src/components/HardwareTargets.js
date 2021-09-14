@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 //   }
 // ]
 
-const HardwareTargets = ({ hardwareTargets }) => {
+const HardwareTargets = ({ hardwareTargets, allInstances }) => {
   const classes = useStyles();
   const [canAddTarget, setCanAddTarget] = React.useState(false);
   const [currentTargets, updateCurrentTargets] = React.useState([
@@ -56,6 +56,8 @@ const HardwareTargets = ({ hardwareTargets }) => {
       i++;
     }
     setCanAddTarget(true);
+
+    if (currentTargets.length === allInstances.length) setCanAddTarget(false);
   };
 
   const handleAddTarget = () => {
