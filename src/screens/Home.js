@@ -29,6 +29,7 @@ const Home = () => {
   const classes = useStyles();
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [allInstances, setAllInstances] = React.useState([]);
+  const [currentTargets, setCurrentTargets] = React.useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [checked, setChecked] = React.useState({
     benchmark: false,
@@ -84,6 +85,8 @@ const Home = () => {
     event.stopPropagation();
     setChecked({ ...checked, [event.target.name]: event.target.checked });
   };
+
+  const handleUpdateCurrentTargets = (data) => setCurrentTargets(data);
 
   return (
     <Box className={classes.box}>
@@ -146,6 +149,7 @@ const Home = () => {
                     <HardwareTargets
                       hardwareTargets={hardwareTargets}
                       allInstances={allInstances}
+                      updateCurrentTargets={handleUpdateCurrentTargets}
                     />
                   )}
                 </div>

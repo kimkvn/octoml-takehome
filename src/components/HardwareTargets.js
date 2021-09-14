@@ -31,11 +31,15 @@ const useStyles = makeStyles((theme) => ({
 //   }
 // ]
 
-const HardwareTargets = ({ hardwareTargets, allInstances }) => {
+const HardwareTargets = ({
+  hardwareTargets,
+  allInstances,
+  updateCurrentTargets,
+}) => {
   const classes = useStyles();
   const [canAddTarget, setCanAddTarget] = React.useState(false);
   const [unavailableInstances, setUnavailableInstances] = React.useState([]);
-  const [currentTargets, updateCurrentTargets] = React.useState([
+  const [currentTargets, setCurrentTargets] = React.useState([
     {
       id: 0,
       instance: null,
@@ -47,6 +51,11 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
     checkCanAddTarget();
     updateUnavailableInstances();
   }, [currentTargets]);
+
+  const handleUpdateCurrentTargets = (newTargets) => {
+    setCurrentTargets(newTargets);
+    updateCurrentTargets(newTargets);
+  };
 
   const checkCanAddTarget = () => {
     let i = 0;
@@ -76,7 +85,7 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
         cpu: null,
       },
     ];
-    updateCurrentTargets(newTargets);
+    handleUpdateCurrentTargets(newTargets);
   };
 
   const handleSelectInstance = (id, newInstance, provider) => {
@@ -92,14 +101,14 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
       return target;
     });
 
-    updateCurrentTargets(newTargets);
+    handleUpdateCurrentTargets(newTargets);
   };
 
   const handleDeleteTarget = (id) => {
     const newTargets = currentTargets.filter((target) => {
       return target.id !== id;
     });
-    updateCurrentTargets(newTargets);
+    handleUpdateCurrentTargets(newTargets);
   };
 
   return (
