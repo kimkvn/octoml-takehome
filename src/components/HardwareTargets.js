@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 const HardwareTargets = ({ hardwareTargets, allInstances }) => {
   const classes = useStyles();
   const [canAddTarget, setCanAddTarget] = React.useState(false);
+  const [unavailableInstances, setUnavailableInstances] = React.useState([]);
   const [currentTargets, updateCurrentTargets] = React.useState([
     {
       id: 0,
@@ -44,6 +45,7 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
 
   React.useEffect(() => {
     checkCanAddTarget();
+    updateUnavailableInstances();
   }, [currentTargets]);
 
   const checkCanAddTarget = () => {
@@ -58,6 +60,11 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
     setCanAddTarget(true);
 
     if (currentTargets.length === allInstances.length) setCanAddTarget(false);
+  };
+
+  const updateUnavailableInstances = () => {
+    const newInstances = currentTargets.map((target) => target.instance);
+    setUnavailableInstances(newInstances);
   };
 
   const handleAddTarget = () => {
@@ -114,6 +121,7 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
             id={target.id}
             data={hardwareTargets}
             instance={target.instance}
+            unavailableInstances={unavailableInstances}
             cpu={target.cpu}
             handleSelectInstance={handleSelectInstance}
             currentTargets={currentTargets}

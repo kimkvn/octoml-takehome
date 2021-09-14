@@ -22,6 +22,7 @@ const HardwareTargetItem = ({
   id,
   data,
   instance,
+  unavailableInstances,
   handleSelectInstance,
   currentTargets,
   deleteItem,
@@ -39,9 +40,6 @@ const HardwareTargetItem = ({
     handleSelectInstance(id, event.target.value);
 
   const instanceIsDisabled = (instance) => {
-    const unavailableInstances = currentTargets.map(
-      (target) => target.instance
-    );
     return unavailableInstances.includes(instance);
   };
 
