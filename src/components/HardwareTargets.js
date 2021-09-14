@@ -71,7 +71,6 @@ const HardwareTargets = ({ hardwareTargets }) => {
   };
 
   const handleSelectInstance = (id, newInstance) => {
-    console.log(id, newInstance);
     const newTargets = currentTargets.map((target) => {
       if (target.id === id) {
         return {
@@ -108,6 +107,7 @@ const HardwareTargets = ({ hardwareTargets }) => {
             instance={target.instance}
             cpu={target.cpu}
             handleSelectInstance={handleSelectInstance}
+            currentTargets={currentTargets}
           />
         ))}
       </List>

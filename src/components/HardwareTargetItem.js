@@ -1,12 +1,7 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core";
-import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
@@ -23,11 +18,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HardwareTargetItem = ({ id, data, instance, handleSelectInstance }) => {
+const HardwareTargetItem = ({
+  id,
+  data,
+  instance,
+  handleSelectInstance,
+  currentTargets,
+}) => {
   const classes = useStyles();
-
   const [provider, setProvider] = React.useState(null);
-  //   const [instance, setInstance] = React.useState(null);
 
   const handleSetProvider = (event) => {
     setProvider(event.target.value);
@@ -36,6 +35,13 @@ const HardwareTargetItem = ({ id, data, instance, handleSelectInstance }) => {
 
   const handleSetInstance = (event) =>
     handleSelectInstance(id, event.target.value);
+
+  const instanceIsDisabled = (instance) => {
+    const unavailableInstances = currentTargets.map(
+      (target) => target.instance
+    );
+    return unavailableInstances.includes(instance);
+  };
 
   return (
     <ListItem className={classes.listItem}>
@@ -62,11 +68,17 @@ const HardwareTargetItem = ({ id, data, instance, handleSelectInstance }) => {
           disabled={!provider}
         >
           {provider
-            ? Object.keys(data[provider].instances).map((instance) => (
-                <MenuItem key={instance} value={instance}>
-                  {instance}
-                </MenuItem>
-              ))
+            ? Object.keys(data[provider].instances).map((instance) => {
+                return (
+                  <MenuItem
+                    key={instance}
+                    value={instance}
+                    disabled={instanceIsDisabled(instance)}
+                  >
+                    {instance}
+                  </MenuItem>
+                );
+              })
             : null}
         </Select>
       </FormControl>
