@@ -85,6 +85,13 @@ const HardwareTargets = ({ hardwareTargets }) => {
     updateCurrentTargets(newTargets);
   };
 
+  const handleDeleteTarget = (id) => {
+    const newTargets = currentTargets.filter((target) => {
+      return target.id !== id;
+    });
+    updateCurrentTargets(newTargets);
+  };
+
   return (
     <>
       <div className={classes.targetsHeader}>
@@ -108,6 +115,8 @@ const HardwareTargets = ({ hardwareTargets }) => {
             cpu={target.cpu}
             handleSelectInstance={handleSelectInstance}
             currentTargets={currentTargets}
+            deleteItem={handleDeleteTarget}
+            disableDelete={i === 0}
           />
         ))}
       </List>

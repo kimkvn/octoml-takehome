@@ -24,6 +24,8 @@ const HardwareTargetItem = ({
   instance,
   handleSelectInstance,
   currentTargets,
+  deleteItem,
+  disableDelete,
 }) => {
   const classes = useStyles();
   const [provider, setProvider] = React.useState(null);
@@ -42,6 +44,8 @@ const HardwareTargetItem = ({
     );
     return unavailableInstances.includes(instance);
   };
+
+  const handleDeleteItem = () => deleteItem(id);
 
   return (
     <ListItem className={classes.listItem}>
@@ -88,9 +92,11 @@ const HardwareTargetItem = ({
       <div className="memoryValue">
         {provider && instance ? data[provider].instances[instance].memory : 0}
       </div>
-      <Button>
-        <CloseIcon />
-      </Button>
+      {disableDelete ? null : (
+        <Button>
+          <CloseIcon onClick={handleDeleteItem} />
+        </Button>
+      )}
     </ListItem>
   );
 };
