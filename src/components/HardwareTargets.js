@@ -79,13 +79,14 @@ const HardwareTargets = ({ hardwareTargets, allInstances }) => {
     updateCurrentTargets(newTargets);
   };
 
-  const handleSelectInstance = (id, newInstance) => {
+  const handleSelectInstance = (id, newInstance, provider) => {
     const newTargets = currentTargets.map((target) => {
       if (target.id === id) {
         return {
           ...target,
           id: newInstance,
           instance: newInstance,
+          cpu: hardwareTargets[provider].instances[newInstance].cpu,
         };
       }
       return target;

@@ -33,11 +33,10 @@ const HardwareTargetItem = ({
 
   const handleSetProvider = (event) => {
     setProvider(event.target.value);
-    handleSelectInstance(id, null);
   };
 
   const handleSetInstance = (event) =>
-    handleSelectInstance(id, event.target.value);
+    handleSelectInstance(id, event.target.value, provider);
 
   const instanceIsDisabled = (instance) => {
     return unavailableInstances.includes(instance);
