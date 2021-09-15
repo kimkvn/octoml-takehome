@@ -39,7 +39,8 @@ const HardwareTargets = ({
 
   const handleUpdateCurrentTargets = (newTargets) => {
     setCurrentTargets(newTargets);
-    updateCurrentTargets(newTargets);
+    const validTargets = newTargets.filter((target) => target.instance !== "");
+    updateCurrentTargets(validTargets);
   };
 
   const checkCanAddTarget = () => {
@@ -116,12 +117,8 @@ const HardwareTargets = ({
           <HardwareTargetItem
             key={i}
             targetData={target}
-            // id={target.id}
             allTargets={hardwareTargets}
-            // instance={target.instance}
             unavailableInstances={unavailableInstances}
-            // cpu={target.cpu}
-            // handleSelectInstance={handleSelectInstance}
             handleUpdateTarget={handleUpdateTarget}
             deleteItem={handleDeleteTarget}
             disableDelete={i === 0}
