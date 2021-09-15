@@ -45,7 +45,6 @@ const HardwareTargetItem = ({
   };
 
   const handleDeleteItem = () => {
-    debugger;
     deleteItem(id);
   };
   return (
@@ -90,10 +89,10 @@ const HardwareTargetItem = ({
         </Select>
       </FormControl>
       <div className="cpuValue">
-        {provider && instance ? data[provider].instances[instance].cpu : 0}
+        {data[provider]?.instances[instance]?.cpu ?? 0}
       </div>
       <div className="memoryValue">
-        {provider && instance ? data[provider].instances[instance].memory : 0}
+        {data[provider]?.instances[instance]?.memory ?? 0}
       </div>
       {disableDelete ? (
         <></>

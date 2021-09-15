@@ -51,7 +51,7 @@ const HardwareTargets = ({
   const checkCanAddTarget = () => {
     let i = 0;
     while (i < currentTargets.length) {
-      if (currentTargets[i].instance === null) {
+      if (currentTargets[i].instance === "") {
         setCanAddTarget(false);
         return;
       }
