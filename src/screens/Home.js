@@ -1,6 +1,12 @@
 import React from "react";
 import HardwareTargets from "../components/HardwareTargets";
-import { makeStyles, useTheme } from "@material-ui/core/";
+import {
+  List,
+  ListItem,
+  makeStyles,
+  MenuItem,
+  useTheme,
+} from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -13,6 +19,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -22,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
   accordionSummary: {
     display: "flex",
     flexDirection: "column",
+  },
+  totalRunsHeader: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "end",
+  },
+  totalRunsItem: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  totalRunsTargetInfo: {},
+  totalRunsGreen: {
+    color: "#4DB396",
   },
 }));
 
@@ -158,7 +178,31 @@ const Home = () => {
           </Card>
         </Grid>
         <Grid item md={3}>
-          <Card>Total Runs</Card>
+          <Card>
+            <header className={classes.totalRunsHeader}>
+              Total Runs:{" "}
+              <h3 className={classes.totalRunsGreen}>
+                {currentTargets.length}
+              </h3>
+            </header>
+            <List>
+              {currentTargets.map((target) => {
+                if (target.instance !== null) {
+                  return (
+                    <ListItem key={target.id} className={classes.totalRunsItem}>
+                      <div className={classes.totalRunsTargetInfo}>
+                        <b>{target.instance}</b>
+                        <p>{target.cpu} cores</p>
+                      </div>
+                      <p className={classes.totalRunsGreen}>1</p>
+                    </ListItem>
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </List>
+          </Card>
         </Grid>
       </Grid>
     </Box>
