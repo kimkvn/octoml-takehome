@@ -24,12 +24,14 @@ const HardwareTargetItem = ({
   instance,
   unavailableInstances,
   handleSelectInstance,
-  currentTargets,
   deleteItem,
   disableDelete,
 }) => {
   const classes = useStyles();
-  const [provider, setProvider] = React.useState(null);
+  const [provider, setProvider] = React.useState("");
+
+  const providerDropdown = React.createRef();
+  const instanceDropdown = React.createRef();
 
   const handleSetProvider = (event) => {
     setProvider(event.target.value);
@@ -42,11 +44,13 @@ const HardwareTargetItem = ({
     return unavailableInstances.includes(instance);
   };
 
-  const handleDeleteItem = () => deleteItem(id);
-
+  const handleDeleteItem = () => {
+    debugger;
+    deleteItem(id);
+  };
   return (
     <ListItem className={classes.listItem}>
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" ref={providerDropdown}>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
@@ -60,7 +64,7 @@ const HardwareTargetItem = ({
           ))}
         </Select>
       </FormControl>
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" ref={instanceDropdown}>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
@@ -68,19 +72,21 @@ const HardwareTargetItem = ({
           onChange={handleSetInstance}
           disabled={!provider}
         >
-          {provider
-            ? Object.keys(data[provider].instances).map((instance) => {
-                return (
-                  <MenuItem
-                    key={instance}
-                    value={instance}
-                    disabled={instanceIsDisabled(instance)}
-                  >
-                    {instance}
-                  </MenuItem>
-                );
-              })
-            : null}
+          {provider ? (
+            Object.keys(data[provider].instances).map((instance) => {
+              return (
+                <MenuItem
+                  key={instance}
+                  value={instance}
+                  disabled={instanceIsDisabled(instance)}
+                >
+                  {instance}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <MenuItem></MenuItem>
+          )}
         </Select>
       </FormControl>
       <div className="cpuValue">
@@ -89,7 +95,9 @@ const HardwareTargetItem = ({
       <div className="memoryValue">
         {provider && instance ? data[provider].instances[instance].memory : 0}
       </div>
-      {disableDelete ? null : (
+      {disableDelete ? (
+        <></>
+      ) : (
         <Button>
           <CloseIcon onClick={handleDeleteItem} />
         </Button>

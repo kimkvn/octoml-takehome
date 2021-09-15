@@ -1,14 +1,7 @@
 import React from "react";
 import HardwareTargets from "../components/HardwareTargets";
-import {
-  List,
-  ListItem,
-  makeStyles,
-  MenuItem,
-  useTheme,
-} from "@material-ui/core/";
+import { List, ListItem, makeStyles } from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -19,7 +12,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   box: {

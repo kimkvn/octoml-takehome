@@ -6,7 +6,7 @@ import { ReactComponent as OctoLogo } from "./logo.svg";
 
 import clsx from "clsx";
 import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
-import { Drawer, makeStyles, useTheme } from "@material-ui/core";
+import { Drawer, makeStyles } from "@material-ui/core";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import HomeIcon from "@material-ui/icons/Home";
 import List from "@material-ui/core/List";
@@ -81,11 +81,8 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => setOpen(!open);
-
+  // const [open, setOpen] = React.useState(false);
+  const open = false;
   return (
     <div className={classes.root}>
       <Router>

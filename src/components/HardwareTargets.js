@@ -2,16 +2,7 @@ import React from "react";
 
 import { makeStyles } from "@material-ui/core";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
-import CloseIcon from "@material-ui/icons/Close";
 import HardwareTargetItem from "./HardwareTargetItem";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +33,7 @@ const HardwareTargets = ({
   const [currentTargets, setCurrentTargets] = React.useState([
     {
       id: 0,
-      instance: null,
+      instance: "",
       cpu: null,
     },
   ]);
@@ -81,8 +72,8 @@ const HardwareTargets = ({
       ...currentTargets,
       {
         id: 0,
-        instance: null,
-        cpu: null,
+        instance: "",
+        cpu: "",
       },
     ];
     handleUpdateCurrentTargets(newTargets);
