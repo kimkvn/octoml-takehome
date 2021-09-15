@@ -15,13 +15,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// let currentTargets = [
-//   {
-//     instance: null,
-//     cpu: '',
-//   }
-// ]
-
 const HardwareTargets = ({
   hardwareTargets,
   allInstances,
@@ -33,8 +26,9 @@ const HardwareTargets = ({
   const [currentTargets, setCurrentTargets] = React.useState([
     {
       id: 0,
+      provider: "",
       instance: "",
-      cpu: null,
+      cpu: 0,
     },
   ]);
 
@@ -72,21 +66,23 @@ const HardwareTargets = ({
       ...currentTargets,
       {
         id: 0,
+        provider: "",
         instance: "",
-        cpu: "",
+        cpu: 0,
       },
     ];
     handleUpdateCurrentTargets(newTargets);
   };
 
-  const handleSelectInstance = (id, newInstance, provider) => {
+  const handleUpdateTarget = (targetData) => {
+    const { id, provider, instance, cpu } = targetData;
     const newTargets = currentTargets.map((target) => {
       if (target.id === id) {
         return {
-          ...target,
-          id: newInstance,
-          instance: newInstance,
-          cpu: hardwareTargets[provider].instances[newInstance].cpu,
+          id: instance,
+          provider,
+          instance,
+          cpu,
         };
       }
       return target;
@@ -119,13 +115,14 @@ const HardwareTargets = ({
         {currentTargets.map((target, i) => (
           <HardwareTargetItem
             key={i}
-            id={target.id}
-            data={hardwareTargets}
-            instance={target.instance}
+            targetData={target}
+            // id={target.id}
+            allTargets={hardwareTargets}
+            // instance={target.instance}
             unavailableInstances={unavailableInstances}
-            cpu={target.cpu}
-            handleSelectInstance={handleSelectInstance}
-            currentTargets={currentTargets}
+            // cpu={target.cpu}
+            // handleSelectInstance={handleSelectInstance}
+            handleUpdateTarget={handleUpdateTarget}
             deleteItem={handleDeleteTarget}
             disableDelete={i === 0}
           />

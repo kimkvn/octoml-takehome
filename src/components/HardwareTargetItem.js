@@ -19,26 +19,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HardwareTargetItem = ({
-  id,
-  data,
-  instance,
+  targetData,
+  allTargets,
   unavailableInstances,
-  handleSelectInstance,
+  handleUpdateTarget,
   deleteItem,
   disableDelete,
 }) => {
+  const { id, provider, instance, cpu } = targetData;
   const classes = useStyles();
-  const [provider, setProvider] = React.useState("");
 
   const providerDropdown = React.createRef();
   const instanceDropdown = React.createRef();
 
-  const handleSetProvider = (event) => {
-    setProvider(event.target.value);
-  };
+  const handleSetProvider = (event) =>
+    handleUpdateTarget({
+      id,
+      provider: event.target.value,
+      instance,
+      cpu,
+    });
 
-  const handleSetInstance = (event) =>
-    handleSelectInstance(id, event.target.value, provider);
+  const handleSetInstance = (event) => {
+    const instance = event.target.value;
+    handleUpdateTarget({
+      id,
+      provider,
+      instance,
+      cpu: allTargets[provider].instances[instance].cpu,
+    });
+  };
 
   const instanceIsDisabled = (instance) => {
     return unavailableInstances.includes(instance);
@@ -47,16 +57,20 @@ const HardwareTargetItem = ({
   const handleDeleteItem = () => {
     deleteItem(id);
   };
+
   return (
     <ListItem className={classes.listItem}>
       <FormControl variant="outlined" ref={providerDropdown}>
         <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
+          labelId="provider-dropdown"
+          id="provider-dropdown"
           value={provider}
           onChange={handleSetProvider}
         >
-          {Object.keys(data).map((provider) => (
+          <MenuItem value="" disabled>
+            Select Provider
+          </MenuItem>
+          {Object.keys(allTargets).map((provider) => (
             <MenuItem key={provider} value={provider}>
               {provider}
             </MenuItem>
@@ -65,14 +79,18 @@ const HardwareTargetItem = ({
       </FormControl>
       <FormControl variant="outlined" ref={instanceDropdown}>
         <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
+          labelId="instance-dropdown"
+          id="instance-dropdown"
           value={instance}
           onChange={handleSetInstance}
           disabled={!provider}
         >
+          {" "}
+          <MenuItem value="" disabled>
+            Select Instance
+          </MenuItem>
           {provider ? (
-            Object.keys(data[provider].instances).map((instance) => {
+            Object.keys(allTargets[provider].instances).map((instance) => {
               return (
                 <MenuItem
                   key={instance}
@@ -89,10 +107,10 @@ const HardwareTargetItem = ({
         </Select>
       </FormControl>
       <div className="cpuValue">
-        {data[provider]?.instances[instance]?.cpu ?? 0}
+        {allTargets[provider]?.instances[instance]?.cpu ?? "-"}
       </div>
       <div className="memoryValue">
-        {data[provider]?.instances[instance]?.memory ?? 0}
+        {allTargets[provider]?.instances[instance]?.memory ?? "-"}
       </div>
       {disableDelete ? (
         <></>
