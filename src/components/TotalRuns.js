@@ -1,21 +1,45 @@
 import React from "react";
-import { List, ListItem, makeStyles } from "@material-ui/core/";
+import { Grid, List, ListItem, makeStyles } from "@material-ui/core/";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
+  totalRunsCard: {
+    padding: "14px",
+  },
   totalRunsHeader: {
     display: "flex",
     flexDirection: "column",
     alignItems: "end",
   },
+  totalRunsSubHeaderText: {
+    fontSize: "12px",
+    fontWeight: "bold",
+    margin: 0,
+  },
+  totalRunsValue: {
+    margin: "4px 0 ",
+  },
+
   totalRunsItem: {
-    display: "flex",
-    justifyContent: "space-between",
+    padding: "4px 0",
+    alignItems: "baseline",
+  },
+  targetInfoCore: {
+    margin: "2px 0",
+    fontSize: "12px",
+  },
+  targetRunValue: {
+    fontWeight: "bold",
+    margin: 0,
   },
   totalRunsTargetInfo: {},
   totalRunsGreen: {
     color: "#4DB396",
+  },
+  totalRunsButton: {
+    width: "100%",
   },
 }));
 
@@ -28,10 +52,12 @@ const TotalRuns = ({
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card className={classes.totalRunsCard}>
       <header className={classes.totalRunsHeader}>
-        Total Runs:{" "}
-        <h3 className={classes.totalRunsGreen}>{currentTargets.length}</h3>
+        <p className={classes.totalRunsSubHeaderText}>Total Runs: </p>
+        <h2 className={clsx(classes.totalRunsGreen, classes.totalRunsValue)}>
+          {currentTargets.length}
+        </h2>
       </header>
       <section>
         {runBenchmark ? (
@@ -50,11 +76,26 @@ const TotalRuns = ({
           if (target.instance !== null) {
             return (
               <ListItem key={target.id} className={classes.totalRunsItem}>
-                <div className={classes.totalRunsTargetInfo}>
-                  <b>{target.instance}</b>
-                  <p>{target.cpu} cores</p>
-                </div>
-                <p className={classes.totalRunsGreen}>1</p>
+                <Grid container justifyContent="space-between">
+                  <Grid item>
+                    <div className={classes.totalRunsTargetInfo}>
+                      <b>{target.instance}</b>
+                      <p className={classes.targetInfoCore}>
+                        {target.cpu} cores
+                      </p>
+                    </div>
+                  </Grid>
+                  <Grid itemn>
+                    <p
+                      className={clsx(
+                        classes.totalRunsGreen,
+                        classes.targetRunValue
+                      )}
+                    >
+                      1
+                    </p>
+                  </Grid>
+                </Grid>
               </ListItem>
             );
           } else {
@@ -67,6 +108,7 @@ const TotalRuns = ({
         color="primary"
         onClick={() => clickOctomize()}
         disabled={currentTargets.length === 0}
+        className={classes.totalRunsButton}
       >
         Octomize
       </Button>
