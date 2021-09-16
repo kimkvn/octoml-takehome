@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  targetsListSection: {
+    margin: "24px 0 0 0",
+  },
 }));
 
 const initialBenchmarkFormData = {
@@ -153,7 +156,7 @@ const Home = () => {
                   </>
                 )}
               </section>
-              <section>
+              <section className={classes.targetsListSection}>
                 <div className="targetsList">
                   {isLoading ? (
                     <h1>LOADING</h1>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Grid } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   listItem: {
     justifyContent: "space-between",
+  },
+  listItemDropdown: {
+    width: "100%",
   },
 }));
 
@@ -61,65 +64,85 @@ const HardwareTargetItem = ({
 
   return (
     <ListItem className={classes.listItem}>
-      <FormControl variant="outlined" ref={providerDropdown}>
-        <Select
-          labelId="provider-dropdown"
-          id="provider-dropdown"
-          value={provider}
-          onChange={handleSetProvider}
-        >
-          <MenuItem value="" disabled>
-            Select Provider
-          </MenuItem>
-          {Object.keys(allTargets).map((provider) => (
-            <MenuItem key={provider} value={provider}>
-              {provider}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl variant="outlined" ref={instanceDropdown}>
-        <Select
-          labelId="instance-dropdown"
-          id="instance-dropdown"
-          value={instance}
-          onChange={handleSetInstance}
-          disabled={!provider}
-        >
-          {" "}
-          <MenuItem value="" disabled>
-            Select Instance
-          </MenuItem>
-          {provider ? (
-            Object.keys(allTargets[provider].instances).map((instance) => {
-              return (
-                <MenuItem
-                  key={instance}
-                  value={instance}
-                  disabled={instanceIsDisabled(instance)}
-                >
-                  {instance}
+      <Grid container spacing={1} justifyContent="space-between">
+        <Grid item md={2}>
+          <FormControl
+            variant="outlined"
+            ref={providerDropdown}
+            className={classes.listItemDropdown}
+          >
+            <Select
+              labelId="provider-dropdown"
+              id="provider-dropdown"
+              value={provider}
+              onChange={handleSetProvider}
+            >
+              <MenuItem value="" disabled>
+                Select Provider
+              </MenuItem>
+              {Object.keys(allTargets).map((provider) => (
+                <MenuItem key={provider} value={provider}>
+                  {provider}
                 </MenuItem>
-              );
-            })
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item md={4}>
+          <FormControl
+            variant="outlined"
+            ref={instanceDropdown}
+            className={classes.listItemDropdown}
+          >
+            <Select
+              labelId="instance-dropdown"
+              id="instance-dropdown"
+              value={instance}
+              onChange={handleSetInstance}
+              disabled={!provider}
+            >
+              {" "}
+              <MenuItem value="" disabled>
+                Select Instance
+              </MenuItem>
+              {provider ? (
+                Object.keys(allTargets[provider].instances).map((instance) => {
+                  return (
+                    <MenuItem
+                      key={instance}
+                      value={instance}
+                      disabled={instanceIsDisabled(instance)}
+                    >
+                      {instance}
+                    </MenuItem>
+                  );
+                })
+              ) : (
+                <MenuItem></MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item md={1}>
+          <div className="cpuValue">
+            {allTargets[provider]?.instances[instance]?.cpu ?? "-"}
+          </div>
+        </Grid>
+        <Grid item md={1}>
+          <div className="memoryValue">
+            {allTargets[provider]?.instances[instance]?.memory ?? "-"}
+          </div>
+        </Grid>
+        <Grid item md={1}>
+          {disableDelete ? (
+            <></>
           ) : (
-            <MenuItem></MenuItem>
+            <Button>
+              <CloseIcon onClick={handleDeleteItem} />
+            </Button>
           )}
-        </Select>
-      </FormControl>
-      <div className="cpuValue">
-        {allTargets[provider]?.instances[instance]?.cpu ?? "-"}
-      </div>
-      <div className="memoryValue">
-        {allTargets[provider]?.instances[instance]?.memory ?? "-"}
-      </div>
-      {disableDelete ? (
-        <></>
-      ) : (
-        <Button>
-          <CloseIcon onClick={handleDeleteItem} />
-        </Button>
-      )}
+        </Grid>
+      </Grid>
     </ListItem>
   );
 };

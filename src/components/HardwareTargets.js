@@ -1,14 +1,20 @@
 import React from "react";
+import HardwareTargetItem from "./HardwareTargetItem";
 
-import { makeStyles } from "@material-ui/core";
+import { Divider, Grid, makeStyles } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Button from "@material-ui/core/Button";
-import HardwareTargetItem from "./HardwareTargetItem";
 
 const useStyles = makeStyles((theme) => ({
   targetsHeader: {
     display: "flex",
     justifyContent: "space-between",
+  },
+  listHeaders: {
+    padding: "0 14px",
+  },
+  targetsHeaderText: {
+    fontSize: "12px",
   },
   listItem: {
     justifyContent: "space-between",
@@ -113,6 +119,24 @@ const HardwareTargets = ({
           Add
         </Button>
       </div>
+      <section className={classes.listHeaders}>
+        <Grid container spacing={2} justifyContent="space-between">
+          <Grid item md={2}>
+            <p className={classes.targetsHeaderText}>PROVIDER</p>
+          </Grid>
+          <Grid item md={4}>
+            <p className={classes.targetsHeaderText}>INSTANCE</p>
+          </Grid>
+          <Grid item md={1}>
+            <p className={classes.targetsHeaderText}>VCPU</p>
+          </Grid>
+          <Grid item md={1}>
+            <p className={classes.targetsHeaderText}>MEMORY (GB)</p>
+          </Grid>
+          <Grid item md={1}></Grid>
+        </Grid>
+      </section>
+      <Divider />
       <List>
         {currentTargets.map((target, i) => (
           <HardwareTargetItem
