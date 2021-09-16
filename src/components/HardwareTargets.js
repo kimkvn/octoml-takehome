@@ -76,7 +76,7 @@ const HardwareTargets = ({
   };
 
   const handleUpdateTarget = (targetData) => {
-    const { id, provider, instance, cpu } = targetData;
+    const { id, provider, instance, cpu, memory } = targetData;
     const newTargets = currentTargets.map((target) => {
       if (target.id === id) {
         return {
@@ -84,6 +84,7 @@ const HardwareTargets = ({
           provider,
           instance,
           cpu,
+          memory,
         };
       }
       return target;

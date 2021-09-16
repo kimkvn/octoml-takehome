@@ -42,6 +42,7 @@ const initialAccelerateFormData = {
 const Home = () => {
   const classes = useStyles();
   const [isLoading, setLoading] = React.useState(true);
+  const [rawHardwareData, setRawHardwareData] = React.useState({});
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [allInstances, setAllInstances] = React.useState([]);
   const [currentTargets, setCurrentTargets] = React.useState([]);
@@ -65,6 +66,7 @@ const Home = () => {
   async function assembleHardwareTargetsData() {
     let data = await fetchHardwareTargets();
 
+    setRawHardwareData(data);
     let final = {};
 
     const addProviderInstance = (target) => {
@@ -112,11 +114,18 @@ const Home = () => {
             <CardHeader title="Octomize" />
             <CardContent>
               <section>
-                <BenchmarkAccordion />
-                <AccelerateAccordion
-                  formData={accelerateOptions}
-                  updateAccelerateOptions={handleUpdateAccelerateOptions}
-                />
+                {isLoading ? (
+                  <h1>LOADING</h1>
+                ) : (
+                  <>
+                    <BenchmarkAccordion hardwareData={rawHardwareData} />
+                    <AccelerateAccordion
+                      formData={accelerateOptions}
+                      updateAccelerateOptions={handleUpdateAccelerateOptions}
+                      hardwareData={rawHardwareData}
+                    />
+                  </>
+                )}
               </section>
               <section>
                 <div className="targetsList">

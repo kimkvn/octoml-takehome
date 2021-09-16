@@ -1,25 +1,16 @@
 import React from "react";
-import HardwareTargets from "../components/HardwareTargets";
 import {
   InputLabel,
-  List,
-  ListItem,
   makeStyles,
   MenuItem,
   TextField,
 } from "@material-ui/core/";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
@@ -47,14 +38,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BenchmarkAccordion = () => {
+const BenchmarkAccordion = ({ hardwareData }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState({
     benchmark: false,
     accelerate: false,
   });
   const [benchmarkEngine, setBenchmarkEngine] = React.useState("");
-  const [benchmarkError, setBenchmarkError] = React.useState(false);
+  const [errorNumberOfTrials, setErrorNumberOfTrials] = React.useState(false);
+  const [errorRunsPerTrial, setErrorRunsPerTrial] = React.useState(false);
+  const [hardwareTarget, setHardwareTarget] = React.useState({});
 
   const handleChangeCheck = (event) => {
     event.stopPropagation();
@@ -64,13 +57,24 @@ const BenchmarkAccordion = () => {
   const handleSelectBenchmarkEngine = (event) =>
     setBenchmarkEngine(event.target.value);
 
-  const handleTextfieldChange = (event) => {
+  const handleChangeNumberOfTrials = (event) => {
     if (!event.target.value.match(/^[0-9]*$/)) {
-      setBenchmarkError(true);
+      setErrorNumberOfTrials(true);
     } else {
-      setBenchmarkError(false);
+      setErrorNumberOfTrials(false);
     }
   };
+
+  const handleChangeRunsPerTrial = (event) => {
+    if (!event.target.value.match(/^[0-9]*$/)) {
+      setErrorRunsPerTrial(true);
+    } else {
+      setErrorRunsPerTrial(false);
+    }
+  };
+
+  const handleSetHardwareTarget = (event) =>
+    setHardwareTarget(event.target.value);
 
   return (
     <Accordion>
@@ -99,27 +103,47 @@ const BenchmarkAccordion = () => {
               id="engine-dropdown"
               value={benchmarkEngine}
               onChange={handleSelectBenchmarkEngine}
+              label="Engine"
             >
               {" "}
               <MenuItem value={"onyx"}>Onyx</MenuItem>
               <MenuItem value={"tvm"}>TVM</MenuItem>
             </Select>
           </FormControl>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor={"hardware-dropdown"}>Hardware</InputLabel>
+            <Select
+              labelId="hardware-dropdown"
+              id="hardware-dropdown"
+              value={hardwareTarget}
+              onChange={handleSetHardwareTarget}
+              label="Hardware"
+            >
+              {hardwareData.map((target) => (
+                <MenuItem key={target.instance} value={target}>
+                  {target.provider} - {target.instance} - {target.cpu} -{" "}
+                  {target.memory}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             id="outlined-basic"
             label="Number of Trials"
             variant="outlined"
-            error={benchmarkError}
-            helperText={benchmarkError ? "Input must be a valid number" : ""}
-            onChange={handleTextfieldChange}
+            error={errorNumberOfTrials}
+            helperText={
+              errorNumberOfTrials ? "Input must be a valid number" : ""
+            }
+            onChange={handleChangeNumberOfTrials}
           />
           <TextField
             id="outlined-basic"
             label="Runs per Trials"
             variant="outlined"
-            error={benchmarkError}
-            helperText={benchmarkError ? "Input must be a valid number" : ""}
-            onChange={handleTextfieldChange}
+            error={errorRunsPerTrial}
+            helperText={errorRunsPerTrial ? "Input must be a valid number" : ""}
+            onChange={handleChangeRunsPerTrial}
           />
         </form>
       </AccordionDetails>

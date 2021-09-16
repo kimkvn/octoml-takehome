@@ -1,25 +1,16 @@
 import React from "react";
-import HardwareTargets from "../components/HardwareTargets";
 import {
   InputLabel,
-  List,
-  ListItem,
   makeStyles,
   MenuItem,
   TextField,
 } from "@material-ui/core/";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
@@ -47,13 +38,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AccelerateAccordion = ({ updateAccelerateOptions, formData }) => {
+const AccelerateAccordion = ({
+  hardwareData,
+  updateAccelerateOptions,
+  formData,
+}) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState({
     benchmark: false,
     accelerate: false,
   });
   const [engine, setEngine] = React.useState("");
+  const [hardwareTarget, setHardwareTarget] = React.useState({});
   const [showKernelTrials, setShowKernelTrials] = React.useState(false);
   const [benchmarkError, setBenchmarkError] = React.useState(false);
 
@@ -108,6 +104,9 @@ const AccelerateAccordion = ({ updateAccelerateOptions, formData }) => {
     }
   };
 
+  const handleSetHardwareTarget = (event) =>
+    setHardwareTarget(event.target.value);
+
   //   {
   //     "engine": { "TVM": { "kernel_trials": 2000 } },
   //     "hardware": {
@@ -146,23 +145,41 @@ const AccelerateAccordion = ({ updateAccelerateOptions, formData }) => {
             id="engine-dropdown"
             value={engine}
             onChange={handleSetEngine}
+            label="Engine"
           >
             {" "}
             <MenuItem value={"ONYX"}>Onyx</MenuItem>
             <MenuItem value={"TVM"}>TVM</MenuItem>
           </Select>
-          {showKernelTrials ? (
-            <TextField
-              id="outlined-basic"
-              label="Kernel Trials"
-              variant="outlined"
-              error={benchmarkError}
-              helperText={benchmarkError ? "Input must be a valid number" : ""}
-              onChange={handleTextfieldChange}
-            />
-          ) : (
-            ""
-          )}
+        </FormControl>
+        {showKernelTrials ? (
+          <TextField
+            id="outlined-basic"
+            label="Kernel Trials"
+            variant="outlined"
+            error={benchmarkError}
+            helperText={benchmarkError ? "Input must be a valid number" : ""}
+            onChange={handleTextfieldChange}
+          />
+        ) : (
+          ""
+        )}
+        <FormControl variant="outlined">
+          <InputLabel id={"hardware-dropdown"}>Hardware</InputLabel>
+          <Select
+            labelId="hardware-dropdown"
+            id="hardware-dropdown"
+            value={hardwareTarget}
+            onChange={handleSetHardwareTarget}
+            label="Hardware"
+          >
+            {hardwareData.map((target) => (
+              <MenuItem key={target.instance} value={target}>
+                {target.provider} - {target.instance} - {target.cpu} -{" "}
+                {target.memory}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
       </AccordionDetails>
     </Accordion>

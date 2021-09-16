@@ -47,6 +47,7 @@ const HardwareTargetItem = ({
       provider,
       instance,
       cpu: allTargets[provider].instances[instance].cpu,
+      memory: allTargets[provider].instances[instance].memory,
     });
   };
 
