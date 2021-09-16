@@ -38,38 +38,57 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BenchmarkAccordion = ({ hardwareData }) => {
+const BenchmarkAccordion = ({ hardwareData, updateBenchmarkOptions }) => {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState({
-    benchmark: false,
-    accelerate: false,
-  });
+  const [checked, setChecked] = React.useState(false);
   const [benchmarkEngine, setBenchmarkEngine] = React.useState("");
+  const [numberOfTrials, setNumberOfTrials] = React.useState(0);
+  const [runsPerTrial, setRunsPerTrial] = React.useState(0);
   const [errorNumberOfTrials, setErrorNumberOfTrials] = React.useState(false);
   const [errorRunsPerTrial, setErrorRunsPerTrial] = React.useState(false);
   const [hardwareTarget, setHardwareTarget] = React.useState({});
 
+  React.useEffect(() => {
+    handleUpdateBenchmarkOptions();
+  }, [benchmarkEngine, hardwareTarget, numberOfTrials, runsPerTrial]);
+
   const handleChangeCheck = (event) => {
     event.stopPropagation();
-    setChecked({ ...checked, [event.target.name]: event.target.checked });
+    setChecked(!checked);
+  };
+
+  const handleUpdateBenchmarkOptions = () => {
+    // TODO: "Form validation", don't allow user to submit/check option to request Benchmark
+    // if options are missing
+    const options = {
+      engine: benchmarkEngine,
+      hardware: hardwareTarget,
+      num_trials: numberOfTrials,
+      runs_per_trial: runsPerTrial,
+    };
+    updateBenchmarkOptions(options);
   };
 
   const handleSelectBenchmarkEngine = (event) =>
     setBenchmarkEngine(event.target.value);
 
   const handleChangeNumberOfTrials = (event) => {
-    if (!event.target.value.match(/^[0-9]*$/)) {
+    const count = event.target.value;
+    if (!count.match(/^[0-9]*$/)) {
       setErrorNumberOfTrials(true);
     } else {
       setErrorNumberOfTrials(false);
+      setNumberOfTrials(count);
     }
   };
 
   const handleChangeRunsPerTrial = (event) => {
-    if (!event.target.value.match(/^[0-9]*$/)) {
+    const count = event.target.value;
+    if (!count.match(/^[0-9]*$/)) {
       setErrorRunsPerTrial(true);
     } else {
       setErrorRunsPerTrial(false);
+      setRunsPerTrial(count);
     }
   };
 
@@ -82,7 +101,7 @@ const BenchmarkAccordion = ({ hardwareData }) => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={checked.benchmark}
+              checked={checked}
               onClick={handleChangeCheck}
               name="benchmark"
               color="primary"

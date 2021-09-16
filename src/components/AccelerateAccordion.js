@@ -44,10 +44,7 @@ const AccelerateAccordion = ({
   formData,
 }) => {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState({
-    benchmark: false,
-    accelerate: false,
-  });
+  const [checked, setChecked] = React.useState(false);
   const [engine, setEngine] = React.useState("");
   const [hardwareTarget, setHardwareTarget] = React.useState({});
   const [showKernelTrials, setShowKernelTrials] = React.useState(false);
@@ -57,13 +54,14 @@ const AccelerateAccordion = ({
     const newData = {
       ...formData,
       engine,
+      hardware: hardwareTarget,
     };
     updateAccelerateOptions(newData);
   }, [engine]);
 
   const handleChangeCheck = (event) => {
     event.stopPropagation();
-    setChecked({ ...checked, [event.target.name]: event.target.checked });
+    setChecked(!checked);
   };
 
   const handleSetEngine = (event) => {
@@ -107,23 +105,13 @@ const AccelerateAccordion = ({
   const handleSetHardwareTarget = (event) =>
     setHardwareTarget(event.target.value);
 
-  //   {
-  //     "engine": { "TVM": { "kernel_trials": 2000 } },
-  //     "hardware": {
-  //       "provider": "AWS",
-  //       "instance": "m4.large",
-  //       "cpu": 2,
-  //       "memory": 8
-  //     }
-  //   }
-
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <FormControlLabel
           control={
             <Checkbox
-              checked={checked.accelerate}
+              checked={checked}
               onClick={handleChangeCheck}
               name="accelerate"
               color="primary"

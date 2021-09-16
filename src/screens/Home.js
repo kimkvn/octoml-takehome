@@ -34,6 +34,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const initialBenchmarkFormData = {
+  engine: "",
+  hardware: {},
+  num_trials: 0,
+  runs_per_trial: 0,
+};
+
 const initialAccelerateFormData = {
   engine: "",
   hardware: {},
@@ -46,6 +53,9 @@ const Home = () => {
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [allInstances, setAllInstances] = React.useState([]);
   const [currentTargets, setCurrentTargets] = React.useState([]);
+  const [benchmarkOptions, setBenchmarkOptions] = React.useState(
+    initialBenchmarkFormData
+  );
   const [accelerateOptions, setAccelerateOptions] = React.useState(
     initialAccelerateFormData
   );
@@ -98,6 +108,8 @@ const Home = () => {
 
   const handleUpdateCurrentTargets = (data) => setCurrentTargets(data);
 
+  const handleUpdateBenchmarkOptions = (data) => setBenchmarkOptions(data);
+
   const handleUpdateAccelerateOptions = (data) => setAccelerateOptions(data);
 
   const handleClickOctomize = () => console.log("OCTOMIZE ME CAPTAIN");
@@ -118,7 +130,10 @@ const Home = () => {
                   <h1>LOADING</h1>
                 ) : (
                   <>
-                    <BenchmarkAccordion hardwareData={rawHardwareData} />
+                    <BenchmarkAccordion
+                      hardwareData={rawHardwareData}
+                      updateBenchmarkOptions={handleUpdateBenchmarkOptions}
+                    />
                     <AccelerateAccordion
                       formData={accelerateOptions}
                       updateAccelerateOptions={handleUpdateAccelerateOptions}
