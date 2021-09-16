@@ -84,8 +84,13 @@ https://user-images.githubusercontent.com/8834946/133664145-7a80d983-9833-49b2-a
 
 https://user-images.githubusercontent.com/8834946/133665020-a8ca982f-3447-4598-b714-46f2a8a6c69e.mov
 
-**Notes & Thoughts*
+**Notes & Thoughts**
 - The difference between the ONYX and TVM engine-setting was an interesting hiccup to overcome
 - For the hardware targets dropdown: same conundrum as the Benchmark accordion. 
 - Got it to a point where `Home.js` will capture/assemble the body for the /accelerate request, but doesn't actually submit it when the user clicks "Octomize"
 
+## Total Runs Panel
+- Reflects what Hardware Targets that have been selected for Octomization, represented by `instance` and `cpu`
+- Unsure if or how the `run count` for each instance could be modified - so the `Total Runs` header reflects the number of hardware targets appropriately configured
+- Clicking Octomize attempts a POST request, but I was unable to get this working / felt like the work I've achieved to this point is adequate for this assessment (and that the Octomize POSTing functionality was last on the list of evaluation importance)
+- I noticed the assignment README mentions what a valid POST body looks like for /benchmark and /accelerate, and gave some examples of why a request would error/fail given user input - but I think instead of "wasting" a request only for it to fail, we could apply some form validation to the Benchmark and Accelerate accordions that will calculate the (number of trials x runs per trial), and check that (kernel trials < max) and encourage the user to adjust their inputs. I believe this makes for a smoother user experience, and we can reserve propagating UI request Error states for more potentially cryptic request failures than a validation that can be handled client side. 
