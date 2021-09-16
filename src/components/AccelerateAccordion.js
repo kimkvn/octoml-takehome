@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Grid,
   InputLabel,
   makeStyles,
   MenuItem,
@@ -15,26 +16,12 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles((theme) => ({
-  box: {
-    display: "flex",
-    flexDirection: "column",
-  },
   accordionSummary: {
     display: "flex",
     flexDirection: "column",
   },
-  totalRunsHeader: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "end",
-  },
-  totalRunsItem: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  totalRunsTargetInfo: {},
-  totalRunsGreen: {
-    color: "#4DB396",
+  accelerateDropdown: {
+    width: "100%",
   },
 }));
 
@@ -128,49 +115,65 @@ const AccelerateAccordion = ({
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <FormControl variant="outlined">
-          <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
-          <Select
-            labelId="engine-dropdown"
-            id="engine-dropdown"
-            value={engine}
-            onChange={handleSetEngine}
-            label="Engine"
-          >
-            {" "}
-            <MenuItem value={"ONYX"}>Onyx</MenuItem>
-            <MenuItem value={"TVM"}>TVM</MenuItem>
-          </Select>
-        </FormControl>
-        {showKernelTrials ? (
-          <TextField
-            id="outlined-basic"
-            label="Kernel Trials"
-            variant="outlined"
-            error={benchmarkError}
-            helperText={benchmarkError ? "Input must be a valid number" : ""}
-            onChange={handleTextfieldChange}
-          />
-        ) : (
-          ""
-        )}
-        <FormControl variant="outlined">
-          <InputLabel id={"hardware-dropdown"}>Hardware</InputLabel>
-          <Select
-            labelId="hardware-dropdown"
-            id="hardware-dropdown"
-            value={hardwareTarget}
-            onChange={handleSetHardwareTarget}
-            label="Hardware"
-          >
-            {hardwareData.map((target) => (
-              <MenuItem key={target.instance} value={target}>
-                {target.provider} - {target.instance} - {target.cpu} -{" "}
-                {target.memory}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Grid container spacing={1}>
+          <Grid item md={4}>
+            <FormControl
+              variant="outlined"
+              className={classes.accelerateDropdown}
+            >
+              <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
+              <Select
+                labelId="engine-dropdown"
+                id="engine-dropdown"
+                value={engine}
+                onChange={handleSetEngine}
+                label="Engine"
+              >
+                {" "}
+                <MenuItem value={"ONYX"}>Onyx</MenuItem>
+                <MenuItem value={"TVM"}>TVM</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          {showKernelTrials ? (
+            <Grid item md={4}>
+              <TextField
+                id="outlined-basic"
+                label="Kernel Trials"
+                variant="outlined"
+                error={benchmarkError}
+                helperText={
+                  benchmarkError ? "Input must be a valid number" : ""
+                }
+                onChange={handleTextfieldChange}
+              />
+            </Grid>
+          ) : (
+            ""
+          )}
+          <Grid item md={4}>
+            <FormControl
+              variant="outlined"
+              className={classes.accelerateDropdown}
+            >
+              <InputLabel id={"hardware-dropdown"}>Hardware</InputLabel>
+              <Select
+                labelId="hardware-dropdown"
+                id="hardware-dropdown"
+                value={hardwareTarget}
+                onChange={handleSetHardwareTarget}
+                label="Hardware"
+              >
+                {hardwareData.map((target) => (
+                  <MenuItem key={target.instance} value={target}>
+                    {target.provider} - {target.instance} - {target.cpu} -{" "}
+                    {target.memory}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
       </AccordionDetails>
     </Accordion>
   );

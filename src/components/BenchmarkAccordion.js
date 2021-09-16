@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Grid,
   InputLabel,
   makeStyles,
   MenuItem,
@@ -15,26 +16,12 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles((theme) => ({
-  box: {
-    display: "flex",
-    flexDirection: "column",
-  },
   accordionSummary: {
     display: "flex",
     flexDirection: "column",
   },
-  totalRunsHeader: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "end",
-  },
-  totalRunsItem: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  totalRunsTargetInfo: {},
-  totalRunsGreen: {
-    color: "#4DB396",
+  benchmarkDropdown: {
+    width: "100%",
   },
 }));
 
@@ -120,55 +107,76 @@ const BenchmarkAccordion = ({
       </AccordionSummary>
       <AccordionDetails>
         <form>
-          <FormControl variant="outlined">
-            <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
-            <Select
-              labelId="engine-dropdown"
-              id="engine-dropdown"
-              value={benchmarkEngine}
-              onChange={handleSelectBenchmarkEngine}
-              label="Engine"
-            >
-              {" "}
-              <MenuItem value={"onyx"}>Onyx</MenuItem>
-              <MenuItem value={"tvm"}>TVM</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="outlined">
-            <InputLabel htmlFor={"hardware-dropdown"}>Hardware</InputLabel>
-            <Select
-              labelId="hardware-dropdown"
-              id="hardware-dropdown"
-              value={hardwareTarget}
-              onChange={handleSetHardwareTarget}
-              label="Hardware"
-            >
-              {hardwareData.map((target) => (
-                <MenuItem key={target.instance} value={target}>
-                  {target.provider} - {target.instance} - {target.cpu} -{" "}
-                  {target.memory}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            id="outlined-basic"
-            label="Number of Trials"
-            variant="outlined"
-            error={errorNumberOfTrials}
-            helperText={
-              errorNumberOfTrials ? "Input must be a valid number" : ""
-            }
-            onChange={handleChangeNumberOfTrials}
-          />
-          <TextField
-            id="outlined-basic"
-            label="Runs per Trials"
-            variant="outlined"
-            error={errorRunsPerTrial}
-            helperText={errorRunsPerTrial ? "Input must be a valid number" : ""}
-            onChange={handleChangeRunsPerTrial}
-          />
+          <Grid container justifyContent="space-between" spacing={1}>
+            <Grid item md={6}>
+              <FormControl
+                variant="outlined"
+                className={classes.benchmarkDropdown}
+              >
+                <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
+                <Select
+                  labelId="engine-dropdown"
+                  id="engine-dropdown"
+                  value={benchmarkEngine}
+                  onChange={handleSelectBenchmarkEngine}
+                  label="Engine"
+                >
+                  {" "}
+                  <MenuItem value={"onyx"}>Onyx</MenuItem>
+                  <MenuItem value={"tvm"}>TVM</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item md={6}>
+              <FormControl
+                variant="outlined"
+                className={classes.benchmarkDropdown}
+              >
+                <InputLabel htmlFor={"hardware-dropdown"}>Hardware</InputLabel>
+                <Select
+                  labelId="hardware-dropdown"
+                  id="hardware-dropdown"
+                  value={hardwareTarget}
+                  onChange={handleSetHardwareTarget}
+                  label="Hardware"
+                >
+                  {hardwareData.map((target) => (
+                    <MenuItem key={target.instance} value={target}>
+                      {target.provider} - {target.instance} - {target.cpu} -{" "}
+                      {target.memory}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          <Grid container justifyContent="space-between" spacing={1}>
+            <Grid item>
+              <TextField
+                id="outlined-basic"
+                label="Number of Trials"
+                variant="outlined"
+                error={errorNumberOfTrials}
+                helperText={
+                  errorNumberOfTrials ? "Input must be a valid number" : ""
+                }
+                onChange={handleChangeNumberOfTrials}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="outlined-basic"
+                label="Runs per Trials"
+                variant="outlined"
+                error={errorRunsPerTrial}
+                helperText={
+                  errorRunsPerTrial ? "Input must be a valid number" : ""
+                }
+                onChange={handleChangeRunsPerTrial}
+              />
+            </Grid>
+          </Grid>
         </form>
       </AccordionDetails>
     </Accordion>
