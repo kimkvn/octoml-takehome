@@ -20,6 +20,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+  octoLogo: {
+    display: "flex",
+    justifyContent: "center",
+    marginLeft: "-15px",
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
@@ -100,7 +105,9 @@ function App() {
           }}
         >
           <List>
-            <OctoLogo />
+            <span className={classes.octoLogo}>
+              <OctoLogo />
+            </span>
             <Link to="/">
               <ListItem button>
                 <ListItemIcon>

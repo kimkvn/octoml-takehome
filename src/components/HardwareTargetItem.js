@@ -13,9 +13,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  listItem: {
-    justifyContent: "space-between",
-  },
   listItemDropdown: {
     width: "100%",
   },
@@ -64,8 +61,13 @@ const HardwareTargetItem = ({
   };
 
   return (
-    <ListItem className={classes.listItem}>
-      <Grid container spacing={1} justifyContent="space-between">
+    <ListItem>
+      <Grid
+        container
+        spacing={1}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Grid item md={2}>
           <FormControl
             variant="outlined"

@@ -125,7 +125,7 @@ const Home = () => {
     <Box className={classes.box}>
       <header>
         <h2>Shufflenet-v2.onnx</h2>
-        <p>Created three days ago by Mike Johnson</p>
+        <p>Created three days ago by Kevin Kim</p>
       </header>
       <Grid container justifyContent={"center"} spacing={2}>
         <Grid item md={9}>

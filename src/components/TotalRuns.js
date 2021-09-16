@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
 
   totalRunsItem: {
     padding: "4px 0",
-    alignItems: "baseline",
   },
   targetInfoCore: {
     margin: "2px 0",
