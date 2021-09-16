@@ -85,7 +85,7 @@ const TotalRuns = ({
                       </p>
                     </div>
                   </Grid>
-                  <Grid itemn>
+                  <Grid item>
                     <p
                       className={clsx(
                         classes.totalRunsGreen,

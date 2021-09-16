@@ -39,8 +39,9 @@ const HardwareTargetItem = ({
     handleUpdateTarget({
       id,
       provider: event.target.value,
-      instance,
-      cpu,
+      instance: "",
+      cpu: 0,
+      memory: 0,
     });
 
   const handleSetInstance = (event) => {

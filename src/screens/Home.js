@@ -2,14 +2,13 @@ import React from "react";
 import HardwareTargets from "../components/HardwareTargets";
 import BenchmarkAccordion from "../components/BenchmarkAccordion";
 import AccelerateAccordion from "../components/AccelerateAccordion";
-import { List, ListItem, makeStyles } from "@material-ui/core/";
+import TotalRuns from "../components/TotalRuns";
+import { makeStyles } from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import TotalRuns from "../components/TotalRuns";
 
 const url = "http://netheria.takehome.octoml.ai";
 
@@ -107,9 +106,9 @@ const Home = () => {
       let res = await fetch(`${url}/benchmark`, {
         method: "POST",
         body: JSON.stringify(benchmarkOptions),
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
         mode: "no-cors",
       });
       console.log(res);
