@@ -9,28 +9,14 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import TotalRuns from "../components/TotalRuns";
+
+const url = "http://netheria.takehome.octoml.ai";
 
 const useStyles = makeStyles((theme) => ({
   box: {
     display: "flex",
     flexDirection: "column",
-  },
-  accordionSummary: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  totalRunsHeader: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "end",
-  },
-  totalRunsItem: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  totalRunsTargetInfo: {},
-  totalRunsGreen: {
-    color: "#4DB396",
   },
 }));
 
@@ -53,6 +39,8 @@ const Home = () => {
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [allInstances, setAllInstances] = React.useState([]);
   const [currentTargets, setCurrentTargets] = React.useState([]);
+  const [requestBenchmark, setRequestBenchmark] = React.useState(false);
+  const [requestAcceleration, setRequestAcceleration] = React.useState(false);
   const [benchmarkOptions, setBenchmarkOptions] = React.useState(
     initialBenchmarkFormData
   );
@@ -61,9 +49,8 @@ const Home = () => {
   );
 
   async function fetchHardwareTargets() {
-    const url = "http://netheria.takehome.octoml.ai/hardware";
     try {
-      let res = await fetch(url, {
+      let res = await fetch(`${url}/hardware`, {
         method: "GET",
         // mode: "no-cors",
       });
@@ -112,7 +99,25 @@ const Home = () => {
 
   const handleUpdateAccelerateOptions = (data) => setAccelerateOptions(data);
 
-  const handleClickOctomize = () => console.log("OCTOMIZE ME CAPTAIN");
+  async function postOctomize() {
+    try {
+      let res = await fetch(`${url}/benchmark`, {
+        method: "POST",
+        body: JSON.stringify(benchmarkOptions),
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        mode: "no-cors",
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleClickOctomize = () => {
+    postOctomize();
+  };
 
   return (
     <Box className={classes.box}>
@@ -133,11 +138,17 @@ const Home = () => {
                     <BenchmarkAccordion
                       hardwareData={rawHardwareData}
                       updateBenchmarkOptions={handleUpdateBenchmarkOptions}
+                      confirmBenchmarkRequest={(bool) =>
+                        setRequestBenchmark(bool)
+                      }
                     />
                     <AccelerateAccordion
                       formData={accelerateOptions}
                       updateAccelerateOptions={handleUpdateAccelerateOptions}
                       hardwareData={rawHardwareData}
+                      confirmAccelerateRequest={(bool) =>
+                        setRequestAcceleration(bool)
+                      }
                     />
                   </>
                 )}
@@ -148,6 +159,7 @@ const Home = () => {
                     <h1>LOADING</h1>
                   ) : (
                     <HardwareTargets
+                      currentTargets={currentTargets}
                       hardwareTargets={hardwareTargets}
                       allInstances={allInstances}
                       updateCurrentTargets={handleUpdateCurrentTargets}
@@ -159,39 +171,12 @@ const Home = () => {
           </Card>
         </Grid>
         <Grid item md={3}>
-          <Card>
-            <header className={classes.totalRunsHeader}>
-              Total Runs:{" "}
-              <h3 className={classes.totalRunsGreen}>
-                {currentTargets.length}
-              </h3>
-            </header>
-            <List>
-              {currentTargets.map((target) => {
-                if (target.instance !== null) {
-                  return (
-                    <ListItem key={target.id} className={classes.totalRunsItem}>
-                      <div className={classes.totalRunsTargetInfo}>
-                        <b>{target.instance}</b>
-                        <p>{target.cpu} cores</p>
-                      </div>
-                      <p className={classes.totalRunsGreen}>1</p>
-                    </ListItem>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </List>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleClickOctomize}
-              disabled={currentTargets.length === 0}
-            >
-              Octomize
-            </Button>
-          </Card>
+          <TotalRuns
+            currentTargets={currentTargets}
+            runBenchmark={requestBenchmark}
+            runAcceleration={requestAcceleration}
+            clickOctomize={handleClickOctomize}
+          />
         </Grid>
       </Grid>
     </Box>

@@ -38,7 +38,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BenchmarkAccordion = ({ hardwareData, updateBenchmarkOptions }) => {
+const BenchmarkAccordion = ({
+  hardwareData,
+  updateBenchmarkOptions,
+  confirmBenchmarkRequest,
+}) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
   const [benchmarkEngine, setBenchmarkEngine] = React.useState("");
@@ -55,6 +59,7 @@ const BenchmarkAccordion = ({ hardwareData, updateBenchmarkOptions }) => {
   const handleChangeCheck = (event) => {
     event.stopPropagation();
     setChecked(!checked);
+    confirmBenchmarkRequest(!checked);
   };
 
   const handleUpdateBenchmarkOptions = () => {

@@ -42,6 +42,7 @@ const AccelerateAccordion = ({
   hardwareData,
   updateAccelerateOptions,
   formData,
+  confirmAccelerateRequest,
 }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
@@ -62,6 +63,7 @@ const AccelerateAccordion = ({
   const handleChangeCheck = (event) => {
     event.stopPropagation();
     setChecked(!checked);
+    confirmAccelerateRequest(!checked);
   };
 
   const handleSetEngine = (event) => {
