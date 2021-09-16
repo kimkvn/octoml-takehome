@@ -47,30 +47,76 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AccelerateAccordion = () => {
+const AccelerateAccordion = ({ updateAccelerateOptions, formData }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState({
     benchmark: false,
     accelerate: false,
   });
-  const [benchmarkEngine, setBenchmarkEngine] = React.useState("");
+  const [engine, setEngine] = React.useState("");
+  const [showKernelTrials, setShowKernelTrials] = React.useState(false);
   const [benchmarkError, setBenchmarkError] = React.useState(false);
+
+  React.useEffect(() => {
+    const newData = {
+      ...formData,
+      engine,
+    };
+    updateAccelerateOptions(newData);
+  }, [engine]);
 
   const handleChangeCheck = (event) => {
     event.stopPropagation();
     setChecked({ ...checked, [event.target.name]: event.target.checked });
   };
 
-  const handleSelectAccelerateEngine = (event) =>
-    setBenchmarkEngine(event.target.value);
+  const handleSetEngine = (event) => {
+    /* Ideally, I would send the new "engine" up to the parent, which would then 
+        send the new state back down to this accordion, but because the type of "engine" 
+        can change from a string to an object (depending on ONYX vs TVM), I'm managing 
+        engine here in component state, and using useEffect to inform the parent the 
+        engine has changed
+      */
+    const newEngine = event.target.value.toUpperCase();
+    if (newEngine === "TVM") {
+      setShowKernelTrials(true);
+    } else {
+      setShowKernelTrials(false);
+    }
+    setEngine(newEngine);
+  };
+
+  const handleSetKernelTrials = (event) => {
+    const trialCount = event.target.value;
+    const newData = {
+      ...formData,
+      engine: {
+        TVM: {
+          kernel_trials: trialCount,
+        },
+      },
+    };
+    updateAccelerateOptions(newData);
+  };
 
   const handleTextfieldChange = (event) => {
     if (!event.target.value.match(/^[0-9]*$/)) {
       setBenchmarkError(true);
     } else {
       setBenchmarkError(false);
+      handleSetKernelTrials(event);
     }
   };
+
+  //   {
+  //     "engine": { "TVM": { "kernel_trials": 2000 } },
+  //     "hardware": {
+  //       "provider": "AWS",
+  //       "instance": "m4.large",
+  //       "cpu": 2,
+  //       "memory": 8
+  //     }
+  //   }
 
   return (
     <Accordion>
@@ -93,29 +139,31 @@ const AccelerateAccordion = () => {
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <form>
-          <FormControl variant="outlined">
-            <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
-            <Select
-              labelId="engine-dropdown"
-              id="engine-dropdown"
-              value={benchmarkEngine}
-              onChange={handleSelectAccelerateEngine}
-            >
-              {" "}
-              <MenuItem value={"onyx"}>Onyx</MenuItem>
-              <MenuItem value={"tvm"}>TVM</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            id="outlined-basic"
-            label="Number of Trials"
-            variant="outlined"
-            error={benchmarkError}
-            helperText={benchmarkError ? "Input must be a valid number" : ""}
-            onChange={handleTextfieldChange}
-          />
-        </form>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor={"engine-dropdown"}>Engine</InputLabel>
+          <Select
+            labelId="engine-dropdown"
+            id="engine-dropdown"
+            value={engine}
+            onChange={handleSetEngine}
+          >
+            {" "}
+            <MenuItem value={"ONYX"}>Onyx</MenuItem>
+            <MenuItem value={"TVM"}>TVM</MenuItem>
+          </Select>
+          {showKernelTrials ? (
+            <TextField
+              id="outlined-basic"
+              label="Kernel Trials"
+              variant="outlined"
+              error={benchmarkError}
+              helperText={benchmarkError ? "Input must be a valid number" : ""}
+              onChange={handleTextfieldChange}
+            />
+          ) : (
+            ""
+          )}
+        </FormControl>
       </AccordionDetails>
     </Accordion>
   );

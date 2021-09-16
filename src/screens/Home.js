@@ -34,12 +34,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const initialAccelerateFormData = {
+  engine: "",
+  hardware: {},
+};
+
 const Home = () => {
   const classes = useStyles();
+  const [isLoading, setLoading] = React.useState(true);
   const [hardwareTargets, setHardwareTargets] = React.useState(null);
   const [allInstances, setAllInstances] = React.useState([]);
   const [currentTargets, setCurrentTargets] = React.useState([]);
-  const [isLoading, setLoading] = React.useState(true);
+  const [accelerateOptions, setAccelerateOptions] = React.useState(
+    initialAccelerateFormData
+  );
 
   async function fetchHardwareTargets() {
     const url = "http://netheria.takehome.octoml.ai/hardware";
@@ -88,6 +96,8 @@ const Home = () => {
 
   const handleUpdateCurrentTargets = (data) => setCurrentTargets(data);
 
+  const handleUpdateAccelerateOptions = (data) => setAccelerateOptions(data);
+
   const handleClickOctomize = () => console.log("OCTOMIZE ME CAPTAIN");
 
   return (
@@ -103,7 +113,10 @@ const Home = () => {
             <CardContent>
               <section>
                 <BenchmarkAccordion />
-                <AccelerateAccordion />
+                <AccelerateAccordion
+                  formData={accelerateOptions}
+                  updateAccelerateOptions={handleUpdateAccelerateOptions}
+                />
               </section>
               <section>
                 <div className="targetsList">
