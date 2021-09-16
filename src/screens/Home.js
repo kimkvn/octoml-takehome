@@ -1,6 +1,13 @@
 import React from "react";
 import HardwareTargets from "../components/HardwareTargets";
-import { List, ListItem, makeStyles } from "@material-ui/core/";
+import {
+  InputLabel,
+  List,
+  ListItem,
+  makeStyles,
+  MenuItem,
+  TextField,
+} from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
@@ -12,6 +19,9 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -47,7 +57,8 @@ const Home = () => {
     benchmark: false,
     accelerate: false,
   });
-
+  const [benchmarkEngine, setBenchmarkEngine] = React.useState("");
+  const [benchmarkError, setBenchmarkError] = React.useState(true);
   async function fetchHardwareTargets() {
     const url = "http://netheria.takehome.octoml.ai/hardware";
     try {
@@ -100,6 +111,19 @@ const Home = () => {
 
   const handleUpdateCurrentTargets = (data) => setCurrentTargets(data);
 
+  const handleSelectBenchmarkEngine = (event) =>
+    setBenchmarkEngine(event.target.value);
+
+  const handleTextfieldChange = (event) => {
+    if (!event.target.value.match(/^[0-9]*$/)) {
+      setBenchmarkError(true);
+    } else {
+      setBenchmarkError(false);
+    }
+  };
+
+  const handleClickOctomize = () => console.log("OCTOMIZE ME CAPTAIN");
+
   return (
     <Box className={classes.box}>
       <header>
@@ -129,7 +153,45 @@ const Home = () => {
                       <p>This is some sub content to explain benchmarking</p>
                     </div>
                   </AccordionSummary>
-                  <AccordionDetails>whoa details neato</AccordionDetails>
+                  <AccordionDetails>
+                    <form>
+                      <FormControl variant="outlined">
+                        <InputLabel htmlFor={"engine-dropdown"}>
+                          Engine
+                        </InputLabel>
+                        <Select
+                          labelId="engine-dropdown"
+                          id="engine-dropdown"
+                          value={benchmarkEngine}
+                          onChange={handleSelectBenchmarkEngine}
+                        >
+                          {" "}
+                          <MenuItem value={"onyx"}>Onyx</MenuItem>
+                          <MenuItem value={"tvm"}>TVM</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        id="outlined-basic"
+                        label="Number of Trials"
+                        variant="outlined"
+                        error={benchmarkError}
+                        helperText={
+                          benchmarkError ? "Input must be a valid number" : ""
+                        }
+                        onChange={handleTextfieldChange}
+                      />
+                      <TextField
+                        id="outlined-basic"
+                        label="Runs per Trials"
+                        variant="outlined"
+                        error={benchmarkError}
+                        helperText={
+                          benchmarkError ? "Input must be a valid number" : ""
+                        }
+                        onChange={handleTextfieldChange}
+                      />
+                    </form>
+                  </AccordionDetails>
                 </Accordion>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -150,7 +212,35 @@ const Home = () => {
                       </p>
                     </div>
                   </AccordionSummary>
-                  <AccordionDetails>I'm fast af boi</AccordionDetails>
+                  <AccordionDetails>
+                    <form>
+                      <FormControl variant="outlined">
+                        <InputLabel htmlFor={"engine-dropdown"}>
+                          Engine
+                        </InputLabel>
+                        <Select
+                          labelId="engine-dropdown"
+                          id="engine-dropdown"
+                          value={benchmarkEngine}
+                          onChange={handleSelectBenchmarkEngine}
+                        >
+                          {" "}
+                          <MenuItem value={"onyx"}>Onyx</MenuItem>
+                          <MenuItem value={"tvm"}>TVM</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        id="outlined-basic"
+                        label="Number of Trials"
+                        variant="outlined"
+                        error={benchmarkError}
+                        helperText={
+                          benchmarkError ? "Input must be a valid number" : ""
+                        }
+                        onChange={handleTextfieldChange}
+                      />
+                    </form>
+                  </AccordionDetails>
                 </Accordion>
               </section>
               <section>
@@ -194,6 +284,14 @@ const Home = () => {
                 }
               })}
             </List>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClickOctomize}
+              disabled={currentTargets.length === 0}
+            >
+              Octomize
+            </Button>
           </Card>
         </Grid>
       </Grid>
