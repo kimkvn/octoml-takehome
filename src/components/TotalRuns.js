@@ -4,7 +4,7 @@ import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import clsx from "clsx";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   totalRunsCard: {
     padding: "14px",
   },

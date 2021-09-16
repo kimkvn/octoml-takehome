@@ -8,7 +8,7 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   targetsHeader: {
     display: "flex",
     justifyContent: "space-between",
@@ -26,7 +26,7 @@ const HardwareTargetItem = ({
   deleteItem,
   disableDelete,
 }) => {
-  const { id, provider, instance, cpu } = targetData;
+  const { id, provider, instance } = targetData;
   const classes = useStyles();
 
   const providerDropdown = React.createRef();

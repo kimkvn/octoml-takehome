@@ -15,7 +15,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   accordionSummary: {
     display: "flex",
     flexDirection: "column",

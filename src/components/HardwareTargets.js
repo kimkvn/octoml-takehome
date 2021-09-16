@@ -5,7 +5,7 @@ import { Divider, Grid, makeStyles } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   targetsHeader: {
     display: "flex",
     justifyContent: "space-between",

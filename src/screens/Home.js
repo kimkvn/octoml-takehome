@@ -12,7 +12,7 @@ import CardContent from "@material-ui/core/CardContent";
 
 const url = "http://netheria.takehome.octoml.ai";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   box: {
     display: "flex",
     flexDirection: "column",
