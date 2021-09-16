@@ -8,7 +8,7 @@ And [Material UI](https://mui.com/getting-started/usage/)
 ### To run project locally:
 
 1) Clone repo 
-2) Run `npm start` in terminal
+2) Run `npm install` then `npm start` in terminal
 3) Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 -----
